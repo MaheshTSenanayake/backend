@@ -25,8 +25,10 @@ db.mongoose
   });
 
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Library application" });
+  res.json({ message: "Welcome to issue application" });
 });
+
+require("./app/routes/issue.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
