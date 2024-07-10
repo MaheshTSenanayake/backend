@@ -29,3 +29,31 @@ exports.getissues = async (req, res) => {
       });
     });
 };
+
+exports.updateissue = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedIssue = await Issue.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedIssue) {
+      return res.status(404).send({ message: "Issue not found" });
+    }
+    res.send({ message: "Issue updated successfully", updatedIssue });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.deleteissue = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedIssue = await Issue.findByIdAndDelete(id);
+    if (!deletedIssue) {
+      return res.status(404).send({ message: "Issue not found" });
+    }
+    res.send({ message: "Issue deleted successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};

@@ -10,4 +10,6 @@ module.exports = function (app) {
   });
   app.post("/api/issue/addissue", controller.addissue);
   app.get("/api/issue/getissues", controller.getissues);
+  app.put("/api/issue/updatebyid/:id", controller.updateissue);
+  app.delete("/api/issue/deletebyid/:id", controller.deleteissue);
 };
