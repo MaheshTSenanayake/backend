@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
+const { verifyToken } = require("./app/middlewares/authJwt");
+const initializeUsers = require("./app/utils/initializeUsers"); // Import the initialization script
 
 const app = express();
 
@@ -12,7 +14,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -22,6 +23,7 @@ db.mongoose
   .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`)
   .then(() => {
     console.log("Successfully connected to MongoDB");
+    initializeUsers(); // Initialize users after successful connection
   })
   .catch((err) => {
     console.error("Connection Error", err);
@@ -32,9 +34,10 @@ app.get("/", (req, res) => {
 });
 
 // Register routes
+require("./app/routes/auth.routes")(app);
+app.use(verifyToken);
 require("./app/routes/issue.routes")(app);
 require("./app/routes/user.routes")(app);
-require("./app/routes/auth.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

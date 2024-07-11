@@ -1,7 +1,6 @@
 const db = require("../models");
 const User = db.User;
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config");
 
 exports.signup = async (req, res) => {
@@ -25,19 +24,19 @@ exports.signin = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(404).send({ message: "User Not found." });
+      return res.status(404).send({ message: "User not found." });
     }
 
-    const passwordIsValid = await user.comparePassword(req.body.password);
+    const passwordIsValid = user.comparePassword(req.body.password);
 
     if (!passwordIsValid) {
       return res.status(401).send({
         accessToken: null,
-        message: "Invalid Password!",
+        message: "Invalid password!",
       });
     }
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
+    const token = jwt.sign({ id: user.id, role: user.role }, config.secret, {
       expiresIn: 86400, // 24 hours
     });
 

@@ -1,5 +1,5 @@
-//const { authJwt } = require("../middlewares");
 const controller = require("../controllers/issue.controller");
+const { verifyRoleAccess } = require("../middlewares/userRole");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -10,8 +10,24 @@ module.exports = function (app) {
     next();
   });
 
-  app.post("/api/issue/addissue", controller.addissue);
-  app.get("/api/issue/getissues", controller.getissues);
-  app.put("/api/issue/updatebyid/:id", controller.updateissue);
-  app.delete("/api/issue/deletebyid/:id", controller.deleteissue);
+  app.post(
+    "/api/issue/addissue",
+    verifyRoleAccess("admin"),
+    controller.addissue
+  );
+  app.get(
+    "/api/issue/getissues",
+    verifyRoleAccess("admin", "user", "viewer"),
+    controller.getissues
+  );
+  app.put(
+    "/api/issue/updatebyid/:id",
+    verifyRoleAccess("admin", "user"),
+    controller.updateissue
+  );
+  app.delete(
+    "/api/issue/deletebyid/:id",
+    verifyRoleAccess("admin"),
+    controller.deleteissue
+  );
 };
