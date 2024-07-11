@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      role:'admin'
+      role: "admin",
     });
 
     await user.save();
@@ -42,10 +42,15 @@ exports.signin = async (req, res) => {
     });
 
     res.status(200).send({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      accessToken: token,
+      userData: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      accessToken: {
+        accessToken: token,
+      },
     });
   } catch (err) {
     res.status(500).send({ message: err.message });
