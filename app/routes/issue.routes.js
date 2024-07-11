@@ -1,3 +1,4 @@
+//const { authJwt } = require("../middlewares");
 const controller = require("../controllers/issue.controller");
 
 module.exports = function (app) {
@@ -8,6 +9,7 @@ module.exports = function (app) {
     );
     next();
   });
+
   app.post("/api/issue/addissue", controller.addissue);
   app.get("/api/issue/getissues", controller.getissues);
   app.put("/api/issue/updatebyid/:id", controller.updateissue);

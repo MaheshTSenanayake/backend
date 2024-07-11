@@ -10,7 +10,6 @@ var corsOption = {
 app.use(cors(corsOption));
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
@@ -25,11 +24,13 @@ db.mongoose
   });
 
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to issue application" });
+  res.json({ message: "Welcome to the issue application" });
 });
 
+// Register routes
 require("./app/routes/issue.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/auth.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
