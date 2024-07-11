@@ -8,11 +8,17 @@ exports.addissue = async (req, res) => {
       description: req.body.description,
       severity: req.body.severity,
       priority: req.body.priority,
-      status: req.body.status,
+      status: "Open",
     });
 
     await issue.save();
-    res.send({ message: "Issue added successfully" });
+
+    const issues = await Issue.find();
+
+    res.send({
+      message: "Issue added successfully",
+      issues: issues,
+    });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -36,10 +42,17 @@ exports.updateissue = async (req, res) => {
     const updatedIssue = await Issue.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+
     if (!updatedIssue) {
       return res.status(404).send({ message: "Issue not found" });
     }
-    res.send({ message: "Issue updated successfully", updatedIssue });
+
+    const issues = await Issue.find();
+
+    res.send({
+      message: "Issue updated successfully",
+      issues,
+    });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -49,10 +62,17 @@ exports.deleteissue = async (req, res) => {
   try {
     const id = req.params.id;
     const deletedIssue = await Issue.findByIdAndDelete(id);
+
     if (!deletedIssue) {
       return res.status(404).send({ message: "Issue not found" });
     }
-    res.send({ message: "Issue deleted successfully" });
+
+    const issues = await Issue.find();
+
+    res.send({
+      message: "Issue deleted successfully",
+      issues: issues,
+    });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
