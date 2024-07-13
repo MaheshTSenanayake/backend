@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config");
 const db = require("../models");
-const User = db.User;
 
 verifyRoleAccess = (requiredRole) => {
   return (req, res, next) => {
@@ -20,15 +19,13 @@ verifyRoleAccess = (requiredRole) => {
       return res.status(401).send({ message: "Unauthorized access!" });
     }
 
-    let hasRole = false;
     if (Array.isArray(requiredRole)) {
       if (!requiredRole.includes(decoded.role)) {
         return res.status(401).send({
           message: "Unauthorized access!",
         });
       }
-    }
-    if (decoded.role !== requiredRole) {
+    } else if (decoded.role !== requiredRole) {
       return res.status(401).send({
         message: "Unauthorized access!",
       });
