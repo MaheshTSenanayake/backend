@@ -17,12 +17,12 @@ module.exports = function (app) {
   );
   app.get(
     "/api/issue/getissues",
-    verifyRoleAccess("admin", "user", "viewer"),
+    verifyRoleAccess(["admin", "user", "viewer"]),
     controller.getissues
   );
   app.put(
     "/api/issue/updatebyid/:id",
-    verifyRoleAccess("admin", "user"),
+    verifyRoleAccess(["admin", "user"]),
     controller.updateissue
   );
   app.delete(
